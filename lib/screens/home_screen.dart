@@ -199,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Common Knowledge',
+                            'KNOWLY',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 22,
@@ -221,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       IconButton(
                         icon: const Icon(
                           Icons.person_rounded,
-                          color: Color(0xFF64748B),
+                          color: Color(0xFF6366F1),
                         ),
                         onPressed: () async {
                           await Navigator.push(
@@ -350,14 +350,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .where((c) => c.id == fact.categoryId)
                                     .firstOrNull;
                                 return SingleChildScrollView(
-                                  child: FactCard(
-                                    key: ValueKey(fact.id),
-                                    fact: fact,
-                                    category: category,
-                                    onNext: () => _goNext(
-                                      provider.facts.length,
-                                      provider,
-                                    ),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 44),
+                                      FactCard(
+                                        key: ValueKey(fact.id),
+                                        fact: fact,
+                                        category: category,
+                                        onNext: () => _goNext(
+                                          provider.facts.length,
+                                          provider,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 );
                               },

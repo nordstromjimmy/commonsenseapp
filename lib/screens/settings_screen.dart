@@ -181,11 +181,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _buildCard(
             child: Column(
               children: [
-                _buildInfoRow('App', 'Common Knowledge'),
+                _buildInfoRow('App', 'Knowly'),
                 _buildDivider(),
                 _buildInfoRow('Version', '1.0.0'),
-                _buildDivider(),
-                _buildInfoRow('Language', 'English'),
               ],
             ),
           ),
@@ -213,10 +211,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ? const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.check_rounded, size: 20),
                           SizedBox(width: 8),
                           Text(
-                            'Saved!',
+                            'Saved',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,

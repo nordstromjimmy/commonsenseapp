@@ -102,10 +102,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('🧠', style: TextStyle(fontSize: 80)),
+          //const Text('🧠', style: TextStyle(fontSize: 80)),
           const SizedBox(height: 32),
           const Text(
-            'Welcome to\nCommonSense',
+            'Welcome to\nKNOWLY',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
@@ -268,7 +268,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          _buildButton("Let's go! 🚀", _finish),
+          _buildButton("Let's go!", _finish),
         ],
       ),
     );

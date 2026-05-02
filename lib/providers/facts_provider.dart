@@ -12,7 +12,7 @@ class FactsProvider extends ChangeNotifier {
   bool isLoading = false;
   bool hasMore = true;
   int _offset = 0;
-  static const int _pageSize = 20;
+  static const int _pageSize = 1000;
 
   Future<void> loadInitial() async {
     isLoading = true;
