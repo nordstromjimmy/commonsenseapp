@@ -1,11 +1,13 @@
+import 'package:commonsense_app/models/category.dart';
 import 'package:flutter/material.dart';
 import '../models/fact.dart';
 
 class FactCard extends StatefulWidget {
   final Fact fact;
   final VoidCallback? onNext;
+  final Category? category;
 
-  const FactCard({super.key, required this.fact, this.onNext});
+  const FactCard({super.key, required this.fact, this.onNext, this.category});
 
   @override
   State<FactCard> createState() => _FactCardState();
@@ -69,21 +71,48 @@ class _FactCardState extends State<FactCard>
           mainAxisSize: MainAxisSize.min,
           children: [
             // Label
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                color: const Color(0xFF6366F1).withOpacity(0.15),
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: const Text(
-                'Did you know?',
-                style: TextStyle(
-                  color: Color(0xFF818CF8),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.5,
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF6366F1).withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: const Text(
+                    'Do you know?',
+                    style: TextStyle(
+                      color: Color(0xFF818CF8),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
                 ),
-              ),
+                const Spacer(),
+                if (widget.category != null)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF334155),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      widget.category!.name,
+                      style: const TextStyle(
+                        color: Color(0xFF94A3B8),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: 20),
 
@@ -166,38 +195,6 @@ class _FactCardState extends State<FactCard>
                       ),
                     ),
                     const SizedBox(height: 24),
-
-                    // Next button
-                    if (widget.onNext != null)
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: widget.onNext,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1E3A5F),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Next',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              Icon(Icons.arrow_forward_rounded, size: 18),
-                            ],
-                          ),
-                        ),
-                      ),
                   ],
                 ),
               ),

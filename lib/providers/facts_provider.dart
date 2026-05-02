@@ -21,13 +21,18 @@ class FactsProvider extends ChangeNotifier {
     notifyListeners();
     try {
       categories = await _api.getCategories();
-      facts = await _api.getFacts(
-        limit: _pageSize,
-        offset: 0,
-        categoryId: selectedCategoryId,
-      );
-      _offset = facts.length;
-      hasMore = facts.length == _pageSize;
+      if (selectedCategoryId == null) {
+        facts = await _api.getRandomFacts(count: _pageSize);
+        hasMore = false;
+      } else {
+        facts = await _api.getFacts(
+          limit: _pageSize,
+          offset: 0,
+          categoryId: selectedCategoryId,
+        );
+        _offset = facts.length;
+        hasMore = facts.length == _pageSize;
+      }
     } catch (e) {
       facts = [];
     }

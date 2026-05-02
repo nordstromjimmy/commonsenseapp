@@ -1,3 +1,4 @@
+import 'package:commonsense_app/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,10 +47,136 @@ class _HomeScreenState extends State<HomeScreen> {
         curve: Curves.easeInOut,
       );
     }
-    // Load more when nearing end
     if (_currentIndex >= total - 5) {
       provider.loadMore();
     }
+  }
+
+  void _openCategorySheet(BuildContext context, FactsProvider provider) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1E293B),
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => DraggableScrollableSheet(
+        initialChildSize: 0.5,
+        minChildSize: 0.3,
+        maxChildSize: 0.85,
+        expand: false,
+        builder: (_, scrollController) => Padding(
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Handle bar
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF334155),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Browse by Category',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: ListView(
+                  controller: scrollController,
+                  children: [
+                    _buildCategoryRow(
+                      label: 'All',
+                      isSelected: provider.selectedCategoryId == null,
+                      onTap: () {
+                        setState(() => _currentIndex = 0);
+                        provider.selectCategory(null);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ...provider.categories.map(
+                      (cat) => _buildCategoryRow(
+                        label: cat.name,
+                        isSelected: cat.id == provider.selectedCategoryId,
+                        onTap: () {
+                          setState(() => _currentIndex = 0);
+                          provider.selectCategory(cat.id);
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChip({
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF6366F1) : const Color(0xFF1E293B),
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: isSelected ? Colors.white : const Color(0xFF94A3B8),
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryRow({
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        margin: const EdgeInsets.only(bottom: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF6366F1) : const Color(0xFF0F172A),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? Colors.white : const Color(0xFF94A3B8),
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -90,71 +217,108 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      // Progress indicator
-                      // HIDE NUMBER OF QUESTIONS AVAILABLE
-                      /*                       if (provider.facts.isNotEmpty)
-                        Text(
-                          '${_currentIndex + 1} / ${provider.facts.length}',
-                          style: const TextStyle(
-                            color: Color(0xFF6366F1),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ), */
+                      // Settings button
+                      IconButton(
+                        icon: const Icon(
+                          Icons.person_rounded,
+                          color: Color(0xFF64748B),
+                        ),
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const SettingsScreen(),
+                            ),
+                          );
+                          _loadUserName();
+                        },
+                      ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
 
                 // Category filter
-                if (provider.categories.isNotEmpty)
-                  SizedBox(
-                    height: 38,
-                    child: ListView.separated(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: provider.categories.length + 1,
-                      separatorBuilder: (_, __) => const SizedBox(width: 8),
-                      itemBuilder: (context, index) {
-                        final isAll = index == 0;
-                        final isSelected = isAll
-                            ? provider.selectedCategoryId == null
-                            : provider.categories[index - 1].id ==
-                                  provider.selectedCategoryId;
-                        final label = isAll
-                            ? '✨ All'
-                            : '${provider.categories[index - 1].icon} ${provider.categories[index - 1].name}';
-                        return GestureDetector(
+                if (provider.categories.isNotEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Row(
+                      children: [
+                        // All chip
+                        _buildChip(
+                          label: 'All',
+                          isSelected: provider.selectedCategoryId == null,
                           onTap: () {
                             setState(() => _currentIndex = 0);
-                            provider.selectCategory(
-                              isAll ? null : provider.categories[index - 1].id,
-                            );
+                            provider.selectCategory(null);
                           },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 14),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? const Color(0xFF6366F1)
-                                  : const Color(0xFF1E293B),
-                              borderRadius: BorderRadius.circular(999),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              label,
-                              style: TextStyle(
-                                color: isSelected
-                                    ? Colors.white
-                                    : const Color(0xFF94A3B8),
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                              ),
+                        ),
+                        const SizedBox(width: 8),
+
+                        // Selected category chip
+                        if (provider.selectedCategoryId != null) ...[
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 140),
+                            child: Builder(
+                              builder: (context) {
+                                final selected = provider.categories.firstWhere(
+                                  (c) => c.id == provider.selectedCategoryId,
+                                  orElse: () => provider.categories.first,
+                                );
+                                return _buildChip(
+                                  label: selected.name,
+                                  isSelected: true,
+                                  onTap: () {},
+                                );
+                              },
                             ),
                           ),
-                        );
-                      },
+                          const SizedBox(width: 8),
+                        ],
+
+                        const Spacer(),
+
+                        // Browse button
+                        GestureDetector(
+                          onTap: () => _openCategorySheet(context, provider),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF1E293B),
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                color: const Color(0xFF334155),
+                              ),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Browse',
+                                  style: TextStyle(
+                                    color: Color(0xFF94A3B8),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(width: 4),
+                                Icon(
+                                  Icons.tune_rounded,
+                                  color: Color(0xFF94A3B8),
+                                  size: 15,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                const SizedBox(height: 16),
+                ],
+                const SizedBox(height: 12),
 
                 // Facts feed
                 Expanded(
@@ -171,24 +335,57 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(color: Color(0xFF64748B)),
                           ),
                         )
-                      : PageView.builder(
-                          key: ValueKey(provider.selectedCategoryId),
-                          controller: _pageController,
-                          scrollDirection: Axis.vertical,
-                          onPageChanged: (i) =>
-                              setState(() => _currentIndex = i),
-                          itemCount: provider.facts.length,
-                          itemBuilder: (context, index) {
-                            final Fact fact = provider.facts[index];
-                            return SingleChildScrollView(
-                              child: FactCard(
-                                key: ValueKey(fact.id),
-                                fact: fact,
-                                onNext: () =>
-                                    _goNext(provider.facts.length, provider),
+                      : Stack(
+                          children: [
+                            PageView.builder(
+                              key: ValueKey(provider.selectedCategoryId),
+                              controller: _pageController,
+                              scrollDirection: Axis.vertical,
+                              onPageChanged: (i) =>
+                                  setState(() => _currentIndex = i),
+                              itemCount: provider.facts.length,
+                              itemBuilder: (context, index) {
+                                final Fact fact = provider.facts[index];
+                                final category = provider.categories
+                                    .where((c) => c.id == fact.categoryId)
+                                    .firstOrNull;
+                                return SingleChildScrollView(
+                                  child: FactCard(
+                                    key: ValueKey(fact.id),
+                                    fact: fact,
+                                    category: category,
+                                    onNext: () => _goNext(
+                                      provider.facts.length,
+                                      provider,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            // Scroll hint
+                            if (_currentIndex == 0)
+                              Positioned(
+                                bottom: 16,
+                                left: 0,
+                                right: 0,
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.keyboard_arrow_down_rounded,
+                                      color: Colors.white.withOpacity(0.25),
+                                      size: 32,
+                                    ),
+                                    Text(
+                                      'Scroll for another question',
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.25),
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            );
-                          },
+                          ],
                         ),
                 ),
               ],
