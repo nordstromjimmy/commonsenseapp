@@ -14,15 +14,23 @@ class FactsProvider extends ChangeNotifier {
   int _offset = 0;
   static const int _pageSize = 1000;
 
+  String errorMessage = '';
+
   Future<void> loadInitial() async {
     isLoading = true;
     _offset = 0;
     hasMore = true;
     notifyListeners();
+
     try {
       categories = await _api.getCategories();
+    } catch (e) {
+      print('Categories error: $e');
+    }
+
+    try {
       if (selectedCategoryId == null) {
-        facts = await _api.getRandomFacts(count: _pageSize);
+        facts = await _api.getRandomFacts(count: 1000);
         hasMore = false;
       } else {
         facts = await _api.getFacts(
@@ -34,10 +42,17 @@ class FactsProvider extends ChangeNotifier {
         hasMore = facts.length == _pageSize;
       }
     } catch (e) {
+      print('Facts error: $e');
       facts = [];
     }
+
     isLoading = false;
     notifyListeners();
+  }
+
+  Future<void> retry() async {
+    errorMessage = '';
+    await loadInitial();
   }
 
   Future<void> loadMore() async {

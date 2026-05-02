@@ -9,7 +9,7 @@ class Fact {
     required this.id,
     required this.question,
     required this.answer,
-    required this.explanation,
+    this.explanation = '',
     this.categoryId,
   });
 
@@ -18,7 +18,7 @@ class Fact {
       id: json['id'],
       question: json['question'],
       answer: json['answer'],
-      explanation: json['explanation'],
+      explanation: json['explanation'] ?? '',
       categoryId: json['category_id'],
     );
   }

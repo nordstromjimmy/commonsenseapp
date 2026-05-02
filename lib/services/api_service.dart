@@ -4,7 +4,7 @@ import '../models/fact.dart';
 import '../models/category.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://217.154.222.105/api';
+  static const String baseUrl = 'https://knowly.duckdns.org/api';
 
   Future<List<Fact>> getFacts({
     int limit = 20,
