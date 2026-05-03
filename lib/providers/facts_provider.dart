@@ -1,3 +1,4 @@
+import 'package:commonsense_app/l10n/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/fact.dart';
@@ -16,15 +17,19 @@ class FactsProvider extends ChangeNotifier {
   int _offset = 0;
   static const int _pageSize = 20;
 
+  AppStrings strings = AppStrings.en;
+
   Future<void> loadLanguage() async {
     final prefs = await SharedPreferences.getInstance();
     final lang = prefs.getString('user_language') ?? 'English';
     language = lang == 'Swedish' ? 'sv' : 'en';
+    strings = AppStrings.of(language);
     notifyListeners();
   }
 
   Future<void> setLanguage(String lang) async {
     language = lang == 'Swedish' ? 'sv' : 'en';
+    strings = AppStrings.of(language);
     await loadInitial();
   }
 

@@ -1,3 +1,4 @@
+import 'package:commonsense_app/l10n/app_strings.dart';
 import 'package:commonsense_app/models/category.dart';
 import 'package:flutter/material.dart';
 import '../models/fact.dart';
@@ -6,8 +7,15 @@ class FactCard extends StatefulWidget {
   final Fact fact;
   final VoidCallback? onNext;
   final Category? category;
+  final AppStrings strings;
 
-  const FactCard({super.key, required this.fact, this.onNext, this.category});
+  const FactCard({
+    super.key,
+    required this.fact,
+    required this.strings,
+    this.onNext,
+    this.category,
+  });
 
   @override
   State<FactCard> createState() => _FactCardState();
@@ -82,8 +90,8 @@ class _FactCardState extends State<FactCard>
                     color: const Color(0xFF6366F1).withOpacity(0.15),
                     borderRadius: BorderRadius.circular(999),
                   ),
-                  child: const Text(
-                    'Do you know?',
+                  child: Text(
+                    widget.strings.didYouKnow,
                     style: TextStyle(
                       color: Color(0xFF818CF8),
                       fontSize: 12,
@@ -143,8 +151,8 @@ class _FactCardState extends State<FactCard>
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
-                    'Show Answer',
+                  child: Text(
+                    widget.strings.showAnswer,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),

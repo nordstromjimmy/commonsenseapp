@@ -1,3 +1,4 @@
+import 'package:commonsense_app/l10n/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,6 +15,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final List<String> _languages = ['English', 'Swedish'];
   bool _saved = false;
 
+  AppStrings _strings = AppStrings.en;
+
   @override
   void initState() {
     super.initState();
@@ -22,9 +25,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _loadPrefs() async {
     final prefs = await SharedPreferences.getInstance();
+    final lang = prefs.getString('user_language') ?? 'English';
     setState(() {
       _nameController.text = prefs.getString('user_name') ?? '';
-      _selectedLanguage = prefs.getString('user_language') ?? 'English';
+      _selectedLanguage = lang;
+      _strings = AppStrings.of(lang == 'Swedish' ? 'sv' : 'en');
     });
   }
 
@@ -57,8 +62,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Settings',
+        title: Text(
+          _strings.settings,
           style: TextStyle(
             color: Colors.white,
             fontSize: 18,
@@ -70,13 +75,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.all(24),
         children: [
           // Profile section
-          _buildSectionLabel('Profile'),
+          _buildSectionLabel(_strings.profile),
           _buildCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Your name',
+                Text(
+                  _strings.yourName,
                   style: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
                 ),
                 const SizedBox(height: 8),
@@ -112,7 +117,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SizedBox(height: 16),
 
           // Language section
-          _buildSectionLabel('Language'),
+          _buildSectionLabel(_strings.language),
           _buildCard(
             child: Column(
               children: _languages.map((lang) {
@@ -179,7 +184,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SizedBox(height: 16),
 
           // About section
-          _buildSectionLabel('About'),
+          _buildSectionLabel(_strings.about),
           _buildCard(
             child: Column(
               children: [
@@ -210,12 +215,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 child: _saved
-                    ? const Row(
+                    ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(width: 8),
                           Text(
-                            'Saved',
+                            _strings.saved,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
@@ -223,8 +228,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       )
-                    : const Text(
-                        'Save Changes',
+                    : Text(
+                        _strings.saveChanges,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,

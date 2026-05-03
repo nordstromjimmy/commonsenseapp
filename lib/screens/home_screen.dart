@@ -84,8 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Browse by Category',
+              Text(
+                provider.strings.browseCategories,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   controller: scrollController,
                   children: [
                     _buildCategoryRow(
-                      label: 'All',
+                      label: provider.strings.all,
                       isSelected: provider.selectedCategoryId == null,
                       onTap: () {
                         setState(() => _currentIndex = 0);
@@ -197,27 +197,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'KNOWLY',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'KNOWLY',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
-                          ),
-                          Text(
-                            _userName.isNotEmpty
-                                ? 'Hello, $_userName 👋'
-                                : 'Learn something new today',
-                            style: const TextStyle(
-                              color: Color(0xFF64748B),
-                              fontSize: 13,
+                            Text(
+                              _userName.isNotEmpty
+                                  ? '${provider.strings.hello}, $_userName 👋'
+                                  : provider.strings.learnSomethingNew,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Color(0xFF64748B),
+                                fontSize: 13,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       // Settings button
                       IconButton(
@@ -253,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         // All chip
                         _buildChip(
-                          label: 'All',
+                          label: provider.strings.all,
                           isSelected: provider.selectedCategoryId == null,
                           onTap: () {
                             setState(() => _currentIndex = 0);
@@ -300,19 +304,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: const Color(0xFF334155),
                               ),
                             ),
-                            child: const Row(
+                            child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  'Browse',
-                                  style: TextStyle(
+                                  provider.strings.browse,
+                                  style: const TextStyle(
                                     color: Color(0xFF94A3B8),
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                SizedBox(width: 4),
-                                Icon(
+                                const SizedBox(width: 4),
+                                const Icon(
                                   Icons.tune_rounded,
                                   color: Color(0xFF94A3B8),
                                   size: 15,
@@ -346,8 +350,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 size: 48,
                               ),
                               const SizedBox(height: 16),
-                              const Text(
-                                'Could not load facts',
+                              Text(
+                                provider.strings.couldNotLoad,
                                 style: TextStyle(
                                   color: Color(0xFF64748B),
                                   fontSize: 16,
@@ -355,8 +359,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              const Text(
-                                'Check your connection and try again',
+                              Text(
+                                provider.strings.checkConnection,
                                 style: TextStyle(
                                   color: Color(0xFF475569),
                                   fontSize: 13,
@@ -381,8 +385,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Icons.refresh_rounded,
                                   size: 18,
                                 ),
-                                label: const Text(
-                                  'Try Again',
+                                label: Text(
+                                  provider.strings.tryAgain,
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -411,6 +415,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         key: ValueKey(fact.id),
                                         fact: fact,
                                         category: category,
+                                        strings: provider.strings,
                                         onNext: () => _goNext(
                                           provider.facts.length,
                                           provider,
@@ -435,7 +440,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       size: 32,
                                     ),
                                     Text(
-                                      'Scroll for another question',
+                                      provider.strings.scrollForAnother,
                                       style: TextStyle(
                                         color: Colors.white.withOpacity(0.25),
                                         fontSize: 13,
