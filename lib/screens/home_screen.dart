@@ -28,8 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<FactsProvider>().loadInitial();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final provider = context.read<FactsProvider>();
+      await provider.loadLanguage();
+      await provider.loadInitial();
     });
     _loadUserName();
   }
@@ -231,6 +233,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                           _loadUserName();
+                          if (mounted) {
+                            final provider = context.read<FactsProvider>();
+                            await provider.loadLanguage();
+                            await provider.loadInitial();
+                          }
                         },
                       ),
                     ],

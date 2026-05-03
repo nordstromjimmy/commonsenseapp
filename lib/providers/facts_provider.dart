@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/fact.dart';
 import '../models/category.dart';
 import '../services/api_service.dart';
@@ -9,12 +10,23 @@ class FactsProvider extends ChangeNotifier {
   List<Fact> facts = [];
   List<Category> categories = [];
   int? selectedCategoryId;
+  String language = 'en';
   bool isLoading = false;
   bool hasMore = true;
   int _offset = 0;
-  static const int _pageSize = 1000;
+  static const int _pageSize = 20;
 
-  String errorMessage = '';
+  Future<void> loadLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lang = prefs.getString('user_language') ?? 'English';
+    language = lang == 'Swedish' ? 'sv' : 'en';
+    notifyListeners();
+  }
+
+  Future<void> setLanguage(String lang) async {
+    language = lang == 'Swedish' ? 'sv' : 'en';
+    await loadInitial();
+  }
 
   Future<void> loadInitial() async {
     isLoading = true;
@@ -30,13 +42,14 @@ class FactsProvider extends ChangeNotifier {
 
     try {
       if (selectedCategoryId == null) {
-        facts = await _api.getRandomFacts(count: 1000);
+        facts = await _api.getRandomFacts(count: 1000, lang: language);
         hasMore = false;
       } else {
         facts = await _api.getFacts(
           limit: _pageSize,
           offset: 0,
           categoryId: selectedCategoryId,
+          lang: language,
         );
         _offset = facts.length;
         hasMore = facts.length == _pageSize;
@@ -50,11 +63,6 @@ class FactsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> retry() async {
-    errorMessage = '';
-    await loadInitial();
-  }
-
   Future<void> loadMore() async {
     if (isLoading || !hasMore) return;
     isLoading = true;
@@ -64,6 +72,7 @@ class FactsProvider extends ChangeNotifier {
         limit: _pageSize,
         offset: _offset,
         categoryId: selectedCategoryId,
+        lang: language,
       );
       facts.addAll(more);
       _offset += more.length;
@@ -78,10 +87,7 @@ class FactsProvider extends ChangeNotifier {
     await loadInitial();
   }
 
-  Future<List<Fact>> getRandomFacts({int count = 10}) async {
-    return await _api.getRandomFacts(
-      count: count,
-      categoryId: selectedCategoryId,
-    );
+  Future<void> retry() async {
+    await loadInitial();
   }
 }

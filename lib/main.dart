@@ -8,7 +8,7 @@ import 'screens/onboarding_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  //await prefs.clear(); // Use to clear user
+  await prefs.clear(); // Use to clear user
   final onboardingComplete = prefs.getBool('onboarding_complete') ?? false;
   runApp(MyApp(showOnboarding: !onboardingComplete));
 }

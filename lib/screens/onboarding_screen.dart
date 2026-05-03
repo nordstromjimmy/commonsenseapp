@@ -12,10 +12,10 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   final TextEditingController _nameController = TextEditingController();
-  String _selectedLanguage = 'English';
+  String _selectedLanguage = '';
   int _currentPage = 0;
 
-  final List<String> _languages = ['English'];
+  final List<String> _languages = ['English', 'Swedish'];
 
   void _nextPage() {
     _controller.nextPage(
@@ -222,8 +222,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           const SizedBox(height: 32),
-          ..._languages.map(
-            (lang) => GestureDetector(
+          ..._languages.map((lang) {
+            final flag = lang == 'Swedish' ? '🇸🇪' : '🇬🇧';
+            final isSelected = _selectedLanguage == lang;
+            return GestureDetector(
               onTap: () => setState(() => _selectedLanguage = lang),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
@@ -233,12 +235,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   vertical: 18,
                 ),
                 decoration: BoxDecoration(
-                  color: _selectedLanguage == lang
+                  color: isSelected
                       ? const Color(0xFF6366F1).withOpacity(0.15)
                       : const Color(0xFF1E293B),
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: _selectedLanguage == lang
+                    color: isSelected
                         ? const Color(0xFF6366F1)
                         : Colors.transparent,
                     width: 2,
@@ -246,7 +248,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 child: Row(
                   children: [
-                    const Text('🇬🇧', style: TextStyle(fontSize: 24)),
+                    Text(flag, style: const TextStyle(fontSize: 24)),
                     const SizedBox(width: 16),
                     Text(
                       lang,
@@ -257,16 +259,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ),
                     const Spacer(),
-                    if (_selectedLanguage == lang)
+                    if (isSelected)
                       const Icon(
                         Icons.check_circle_rounded,
                         color: Color(0xFF6366F1),
                       ),
+                    if (!isSelected)
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color(0xFF334155),
+                            width: 2,
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
-            ),
-          ),
+            );
+          }),
           const SizedBox(height: 24),
           _buildButton("Let's go!", _finish),
         ],

@@ -10,8 +10,9 @@ class ApiService {
     int limit = 20,
     int offset = 0,
     int? categoryId,
+    String lang = 'en',
   }) async {
-    String url = '$baseUrl/facts?limit=$limit&offset=$offset';
+    String url = '$baseUrl/facts?limit=$limit&offset=$offset&lang=$lang';
     if (categoryId != null) url += '&category_id=$categoryId';
     final res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
@@ -21,8 +22,12 @@ class ApiService {
     throw Exception('Failed to load facts');
   }
 
-  Future<List<Fact>> getRandomFacts({int count = 10, int? categoryId}) async {
-    String url = '$baseUrl/facts/random?count=$count';
+  Future<List<Fact>> getRandomFacts({
+    int count = 1000,
+    int? categoryId,
+    String lang = 'en',
+  }) async {
+    String url = '$baseUrl/facts/random?count=$count&lang=$lang';
     if (categoryId != null) url += '&category_id=$categoryId';
     final res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {

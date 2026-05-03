@@ -11,7 +11,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final TextEditingController _nameController = TextEditingController();
   String _selectedLanguage = 'English';
-  final List<String> _languages = ['English'];
+  final List<String> _languages = ['English', 'Swedish'];
   bool _saved = false;
 
   @override
@@ -117,6 +117,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Column(
               children: _languages.map((lang) {
                 final isSelected = _selectedLanguage == lang;
+                final flag = lang == 'Swedish' ? '🇸🇪' : '🇬🇧';
                 return GestureDetector(
                   onTap: () => setState(() => _selectedLanguage = lang),
                   child: Container(
@@ -124,6 +125,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       horizontal: 16,
                       vertical: 14,
                     ),
+                    margin: const EdgeInsets.only(bottom: 8),
                     decoration: BoxDecoration(
                       color: isSelected
                           ? const Color(0xFF6366F1).withOpacity(0.1)
@@ -138,7 +140,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     child: Row(
                       children: [
-                        const Text('🇬🇧', style: TextStyle(fontSize: 20)),
+                        Text(flag, style: const TextStyle(fontSize: 20)),
                         const SizedBox(width: 12),
                         Text(
                           lang,
