@@ -40,7 +40,7 @@ class FactsProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      categories = await _api.getCategories();
+      categories = await _api.getCategories(lang: language);
     } catch (e) {
       print('Categories error: $e');
     }

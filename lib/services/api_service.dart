@@ -37,8 +37,8 @@ class ApiService {
     throw Exception('Failed to load random facts');
   }
 
-  Future<List<Category>> getCategories() async {
-    final res = await http.get(Uri.parse('$baseUrl/categories'));
+  Future<List<Category>> getCategories({String lang = 'en'}) async {
+    final res = await http.get(Uri.parse('$baseUrl/categories?lang=$lang'));
     if (res.statusCode == 200) {
       final List data = json.decode(res.body);
       return data.map((e) => Category.fromJson(e)).toList();
