@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => FactsProvider(),
       child: MaterialApp(
-        title: 'CommonSense',
+        title: 'Knowly',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(

@@ -436,13 +436,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     Icon(
                                       Icons.keyboard_arrow_down_rounded,
-                                      color: Colors.white.withOpacity(0.25),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.25,
+                                      ),
                                       size: 32,
                                     ),
                                     Text(
                                       provider.strings.scrollForAnother,
                                       style: TextStyle(
-                                        color: Colors.white.withOpacity(0.25),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.25,
+                                        ),
                                         fontSize: 13,
                                       ),
                                     ),

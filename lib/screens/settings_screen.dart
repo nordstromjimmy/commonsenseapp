@@ -1,5 +1,6 @@
 import 'package:commonsense_app/l10n/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -14,13 +15,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _selectedLanguage = 'English';
   final List<String> _languages = ['English', 'Swedish'];
   bool _saved = false;
-
   AppStrings _strings = AppStrings.en;
+  String _version = '';
 
   @override
   void initState() {
     super.initState();
     _loadPrefs();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    if (mounted) setState(() => _version = info.version);
   }
 
   Future<void> _loadPrefs() async {
@@ -39,7 +46,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('user_name', name);
     await prefs.setString('user_language', _selectedLanguage);
-    setState(() => _saved = true);
+    setState(() {
+      _strings = AppStrings.of(_selectedLanguage == 'Swedish' ? 'sv' : 'en');
+      _saved = true;
+    });
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) setState(() => _saved = false);
     });
@@ -64,7 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         title: Text(
           _strings.settings,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.w700,
@@ -82,7 +92,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Text(
                   _strings.yourName,
-                  style: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
+                  style: const TextStyle(
+                    color: Color(0xFF94A3B8),
+                    fontSize: 13,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 TextField(
@@ -90,7 +103,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   textCapitalization: TextCapitalization.words,
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                   decoration: InputDecoration(
-                    hintText: 'Enter your name',
+                    hintText: _strings.enterYourName,
                     hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
                     filled: true,
                     fillColor: const Color(0xFF0F172A),
@@ -161,8 +174,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             Icons.check_circle_rounded,
                             color: Color(0xFF6366F1),
                             size: 20,
-                          ),
-                        if (!isSelected)
+                          )
+                        else
                           Container(
                             width: 20,
                             height: 20,
@@ -190,7 +203,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 _buildInfoRow('App', 'Knowly'),
                 _buildDivider(),
-                _buildInfoRow('Version', '1.0.0'),
+                _buildInfoRow(
+                  _strings.version,
+                  _version.isEmpty ? '–' : _version,
+                ),
               ],
             ),
           ),
@@ -215,12 +231,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 child: _saved
-                    ? Row(
+                    ? const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Icon(Icons.check_rounded, size: 20),
                           SizedBox(width: 8),
                           Text(
-                            _strings.saved,
+                            'Saved!',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
@@ -230,7 +247,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       )
                     : Text(
                         _strings.saveChanges,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),

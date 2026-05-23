@@ -47,17 +47,18 @@ class FactsProvider extends ChangeNotifier {
 
     try {
       if (selectedCategoryId == null) {
-        facts = await _api.getRandomFacts(count: 1000, lang: language);
+        facts = await _api.getRandomFacts(count: 5000, lang: language);
         hasMore = false;
       } else {
         facts = await _api.getFacts(
-          limit: _pageSize,
+          limit: 5000,
           offset: 0,
           categoryId: selectedCategoryId,
           lang: language,
         );
+        facts.shuffle();
         _offset = facts.length;
-        hasMore = facts.length == _pageSize;
+        hasMore = false;
       }
     } catch (e) {
       print('Facts error: $e');
@@ -74,14 +75,14 @@ class FactsProvider extends ChangeNotifier {
     notifyListeners();
     try {
       final more = await _api.getFacts(
-        limit: _pageSize,
+        limit: 5000,
         offset: _offset,
         categoryId: selectedCategoryId,
         lang: language,
       );
       facts.addAll(more);
       _offset += more.length;
-      hasMore = more.length == _pageSize;
+      hasMore = false;
     } catch (e) {}
     isLoading = false;
     notifyListeners();

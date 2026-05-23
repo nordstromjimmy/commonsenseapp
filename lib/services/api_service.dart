@@ -23,7 +23,7 @@ class ApiService {
   }
 
   Future<List<Fact>> getRandomFacts({
-    int count = 1000,
+    int count = 5000,
     int? categoryId,
     String lang = 'en',
   }) async {

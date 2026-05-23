@@ -197,17 +197,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   // --- Page 3: Language ---
   Widget _buildLanguagePage() {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(32),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 60),
           const Text('🌍', style: TextStyle(fontSize: 60)),
           const SizedBox(height: 24),
-          const Text(
+          Text(
             'Choose your language',
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 30,
               fontWeight: FontWeight.w800,
@@ -217,7 +217,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Text(
             'More languages coming soon.',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
               fontSize: 15,
             ),
           ),
@@ -283,6 +283,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           }),
           const SizedBox(height: 24),
           _buildButton("Let's go!", _finish),
+          const SizedBox(height: 32),
         ],
       ),
     );
