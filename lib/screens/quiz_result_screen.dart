@@ -10,6 +10,7 @@ class QuizResultScreen extends StatelessWidget {
   final List<Fact> facts;
   final List<Fact> allFacts;
   final String categoryName;
+  final Map<int, List<String>> quizQuestions;
 
   const QuizResultScreen({
     super.key,
@@ -17,6 +18,7 @@ class QuizResultScreen extends StatelessWidget {
     required this.facts,
     required this.allFacts,
     required this.categoryName,
+    required this.quizQuestions,
   });
 
   @override
@@ -172,6 +174,7 @@ class QuizResultScreen extends StatelessWidget {
                           facts: facts..shuffle(),
                           allFacts: allFacts,
                           categoryName: categoryName,
+                          quizQuestions: quizQuestions,
                         ),
                       ),
                     );

@@ -32,7 +32,6 @@ class _QuizScreenState extends State<QuizScreen> {
             const SizedBox(height: 8),
 
             // Header
-            const Text('🎯', style: TextStyle(fontSize: 48)),
             const SizedBox(height: 12),
             Text(
               strings.quiz,
@@ -133,11 +132,26 @@ class _QuizScreenState extends State<QuizScreen> {
               ),
               child: Column(
                 children: [
-                  _buildPointsRow('✅', strings.pointsPerCorrect, '+10 pts'),
+                  _buildPointsRow(
+                    Icons.check_box,
+                    const Color(0xFF60A5FA),
+                    strings.pointsPerCorrect,
+                    '+10 pts',
+                  ),
                   const SizedBox(height: 8),
-                  _buildPointsRow('⚡', strings.pointsSpeedBonus, '+5 pts'),
+                  _buildPointsRow(
+                    Icons.strikethrough_s,
+                    const Color(0xFF60A5FA),
+                    strings.pointsSpeedBonus,
+                    '+10 pts',
+                  ),
                   const SizedBox(height: 8),
-                  _buildPointsRow('🏆', strings.pointsPerfectBonus, '+20 pts'),
+                  _buildPointsRow(
+                    Icons.point_of_sale,
+                    const Color(0xFF60A5FA),
+                    strings.pointsPerfectBonus,
+                    '+10 pts',
+                  ),
                 ],
               ),
             ),
@@ -177,7 +191,6 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _startQuiz(BuildContext context, FactsProvider provider) {
-    // Get facts pool based on selected category
     List<Fact> facts = provider.facts
         .where(
           (f) =>
@@ -196,7 +209,6 @@ class _QuizScreenState extends State<QuizScreen> {
       return;
     }
 
-    // Shuffle and take the requested count
     facts.shuffle();
     final quizFacts = facts.take(_questionCount).toList();
 
@@ -209,6 +221,7 @@ class _QuizScreenState extends State<QuizScreen> {
           categoryName: _selectedCategoryId == null
               ? provider.strings.all
               : _selectedCategoryName,
+          quizQuestions: provider.quizQuestions,
         ),
       ),
     );
@@ -239,7 +252,7 @@ class _QuizScreenState extends State<QuizScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF6366F1).withOpacity(0.1)
+              ? const Color(0xFF6366F1).withValues(alpha: 0.1)
               : const Color(0xFF1E293B),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
@@ -297,10 +310,15 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  Widget _buildPointsRow(String emoji, String label, String points) {
+  Widget _buildPointsRow(
+    IconData icon,
+    Color color,
+    String label,
+    String points,
+  ) {
     return Row(
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 16)),
+        Icon(icon, color: color, size: 26),
         const SizedBox(width: 10),
         Expanded(
           child: Text(

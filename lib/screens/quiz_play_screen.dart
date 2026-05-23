@@ -9,12 +9,14 @@ class QuizPlayScreen extends StatefulWidget {
   final List<Fact> facts;
   final List<Fact> allFacts;
   final String categoryName;
+  final Map<int, List<String>> quizQuestions;
 
   const QuizPlayScreen({
     super.key,
     required this.facts,
     required this.allFacts,
     required this.categoryName,
+    required this.quizQuestions,
   });
 
   @override
@@ -57,15 +59,22 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
 
   void _loadQuestion() {
     final current = widget.facts[_currentIndex];
-    final wrongPool =
-        widget.allFacts
-            .where((f) => f.id != current.id && f.answer != current.answer)
-            .toList()
-          ..shuffle();
+    final storedWrong = widget.quizQuestions[current.id];
 
-    final wrongAnswers = wrongPool.take(3).map((f) => f.answer).toList();
+    List<String> wrongAnswers;
+    if (storedWrong != null && storedWrong.length >= 3) {
+      wrongAnswers = storedWrong.take(3).toList();
+    } else {
+      // Fallback to random if no stored answers
+      final wrongPool =
+          widget.allFacts
+              .where((f) => f.id != current.id && f.answer != current.answer)
+              .toList()
+            ..shuffle();
+      wrongAnswers = wrongPool.take(3).map((f) => f.answer).toList();
+    }
+
     _options = [...wrongAnswers, current.answer]..shuffle();
-
     _selectedAnswer = null;
     _answered = false;
     _questionStartTime = DateTime.now();
@@ -126,6 +135,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
               facts: widget.facts,
               allFacts: widget.allFacts,
               categoryName: widget.categoryName,
+              quizQuestions: widget.quizQuestions,
             ),
           ),
         );

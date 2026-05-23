@@ -335,17 +335,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               Row(
                 children: [
-                  _buildStatItem('⭐', '$totalPoints', 'Total Points'),
+                  _buildStatItem(
+                    Icons.star_rounded,
+                    const Color(0xFF60A5FA),
+                    '$totalPoints',
+                    'Total Points',
+                  ),
                   _buildStatDivider(),
-                  _buildStatItem('🎯', '$totalQuizzes', 'Quizzes'),
+                  _buildStatItem(
+                    Icons.quiz_rounded,
+                    const Color(0xFF60A5FA),
+                    '$totalQuizzes',
+                    'Quizzes',
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
               Row(
                 children: [
-                  _buildStatItem('✅', '$totalCorrect', 'Correct'),
+                  _buildStatItem(
+                    Icons.check_circle_rounded,
+                    const Color(0xFF60A5FA),
+                    '$totalCorrect',
+                    'Correct',
+                  ),
                   _buildStatDivider(),
-                  _buildStatItem('📊', '${accuracy.toInt()}%', 'Accuracy'),
+                  _buildStatItem(
+                    Icons.bar_chart_rounded,
+                    const Color(0xFF60A5FA),
+                    '${accuracy.toInt()}%',
+                    'Accuracy',
+                  ),
                 ],
               ),
             ],
@@ -355,12 +375,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildStatItem(String emoji, String value, String label) {
+  Widget _buildStatItem(
+    IconData icon,
+    Color color,
+    String value,
+    String label,
+  ) {
     return Expanded(
       child: Column(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 24)),
-          const SizedBox(height: 4),
+          Icon(icon, color: color, size: 26),
+          const SizedBox(height: 6),
           Text(
             value,
             style: const TextStyle(

@@ -10,6 +10,7 @@ class FactsProvider extends ChangeNotifier {
 
   List<Fact> facts = [];
   List<Category> categories = [];
+  Map<int, List<String>> quizQuestions = {};
   int? selectedCategoryId;
   String language = 'en';
   bool isLoading = false;
@@ -63,6 +64,13 @@ class FactsProvider extends ChangeNotifier {
     } catch (e) {
       print('Facts error: $e');
       facts = [];
+    }
+
+    try {
+      quizQuestions = await _api.getQuizQuestions(lang: language);
+      print('Quiz questions loaded: ${quizQuestions.length}');
+    } catch (e) {
+      print('Quiz questions error: $e');
     }
 
     isLoading = false;

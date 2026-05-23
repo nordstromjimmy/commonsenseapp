@@ -45,4 +45,17 @@ class ApiService {
     }
     throw Exception('Failed to load categories');
   }
+
+  Future<Map<int, List<String>>> getQuizQuestions({String lang = 'en'}) async {
+    final res = await http.get(Uri.parse('$baseUrl/quiz/questions?lang=$lang'));
+    if (res.statusCode == 200) {
+      final List data = json.decode(res.body);
+      final Map<int, List<String>> result = {};
+      for (final item in data) {
+        result[item['fact_id']] = List<String>.from(item['wrong_answers']);
+      }
+      return result;
+    }
+    throw Exception('Failed to load quiz questions');
+  }
 }
