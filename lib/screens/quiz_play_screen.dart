@@ -282,27 +282,6 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                       ),
                     ),
 
-                    // Explanation after answer
-                    if (_answered && current.explanation.isNotEmpty) ...[
-                      const SizedBox(height: 16),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF1E293B),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Text(
-                          current.explanation,
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.7),
-                            fontSize: 14,
-                            height: 1.6,
-                          ),
-                        ),
-                      ),
-                    ],
-
                     const SizedBox(height: 24),
 
                     // Next button
@@ -416,25 +395,29 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
   }
 
   void _showQuitDialog(BuildContext context, String backLabel) {
+    final strings = context.read<FactsProvider>().strings;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: const Color(0xFF1E293B),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Quit Quiz?',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+        title: Text(
+          strings.quitQuiz,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
         ),
-        content: const Text(
-          'Your progress will be lost.',
-          style: TextStyle(color: Color(0xFF94A3B8)),
+        content: Text(
+          strings.quitQuizMessage,
+          style: const TextStyle(color: Color(0xFF94A3B8)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Color(0xFF6366F1)),
+            child: Text(
+              strings.cancel,
+              style: const TextStyle(color: Color(0xFF6366F1)),
             ),
           ),
           TextButton(
@@ -442,9 +425,9 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
               Navigator.pop(context);
               Navigator.pop(context);
             },
-            child: const Text(
-              'Quit',
-              style: TextStyle(color: Color(0xFFEF4444)),
+            child: Text(
+              strings.quit,
+              style: const TextStyle(color: Color(0xFFEF4444)),
             ),
           ),
         ],

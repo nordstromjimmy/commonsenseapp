@@ -78,7 +78,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          _strings.settings,
+          _strings.profile,
           style: const TextStyle(
             color: Colors.white,
             fontSize: 18,
@@ -113,7 +113,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                   decoration: InputDecoration(
                     hintText: _strings.enterYourName,
-                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                    hintStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.3),
+                    ),
                     filled: true,
                     fillColor: const Color(0xFF0F172A),
                     border: OutlineInputBorder(
@@ -155,7 +157,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     margin: const EdgeInsets.only(bottom: 8),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? const Color(0xFF6366F1).withOpacity(0.1)
+                          ? const Color(0xFF6366F1).withValues(alpha: 0.1)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
@@ -323,6 +325,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return FutureBuilder<Map<String, dynamic>>(
       future: StatsService.loadStats(),
       builder: (context, snapshot) {
+        final strings = context.read<FactsProvider>().strings;
         final stats = snapshot.data;
         final totalPoints = stats?['totalPoints'] ?? 0;
         final totalQuizzes = stats?['totalQuizzes'] ?? 0;
@@ -339,14 +342,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Icons.star_rounded,
                     const Color(0xFF60A5FA),
                     '$totalPoints',
-                    'Total Points',
+                    strings.totalPoints,
                   ),
                   _buildStatDivider(),
                   _buildStatItem(
                     Icons.quiz_rounded,
                     const Color(0xFF60A5FA),
                     '$totalQuizzes',
-                    'Quizzes',
+                    strings.quizzes,
                   ),
                 ],
               ),
@@ -357,14 +360,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Icons.check_circle_rounded,
                     const Color(0xFF60A5FA),
                     '$totalCorrect',
-                    'Correct',
+                    strings.correct,
                   ),
                   _buildStatDivider(),
                   _buildStatItem(
                     Icons.bar_chart_rounded,
                     const Color(0xFF60A5FA),
                     '${accuracy.toInt()}%',
-                    'Accuracy',
+                    strings.accuracy,
                   ),
                 ],
               ),

@@ -50,6 +50,13 @@ class AppStrings {
   final String backHome;
   final String perfectScore;
   final String speedBonus;
+  final String totalPoints;
+  final String quizzes;
+  final String accuracy;
+  final String quitQuiz;
+  final String quitQuizMessage;
+  final String cancel;
+  final String quit;
 
   const AppStrings({
     required this.appName,
@@ -103,6 +110,13 @@ class AppStrings {
     required this.backHome,
     required this.perfectScore,
     required this.speedBonus,
+    required this.totalPoints,
+    required this.quizzes,
+    required this.accuracy,
+    required this.quitQuiz,
+    required this.quitQuizMessage,
+    required this.cancel,
+    required this.quit,
   });
 
   static const en = AppStrings(
@@ -158,6 +172,13 @@ class AppStrings {
     backHome: 'Back to Quiz',
     perfectScore: '🏆 Perfect score!',
     speedBonus: '⚡ Speed bonus!',
+    totalPoints: 'Total Points',
+    quizzes: 'Quizzes',
+    accuracy: 'Accuracy',
+    quitQuiz: 'Quit Quiz?',
+    quitQuizMessage: 'Your progress will be lost.',
+    cancel: 'Cancel',
+    quit: 'Quit',
   );
 
   static const sv = AppStrings(
@@ -213,6 +234,13 @@ class AppStrings {
     backHome: 'Tillbaka till quiz',
     perfectScore: '🏆 Perfekt resultat!',
     speedBonus: '⚡ Snabbhetsbonus!',
+    totalPoints: 'Totala poäng',
+    quizzes: 'Quiz',
+    accuracy: 'Noggrannhet',
+    quitQuiz: 'Avsluta quiz?',
+    quitQuizMessage: 'Din framsteg kommer att förloras.',
+    cancel: 'Avbryt',
+    quit: 'Avsluta',
   );
 
   static AppStrings of(String language) {
