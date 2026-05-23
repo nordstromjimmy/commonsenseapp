@@ -32,6 +32,24 @@ class AppStrings {
   final String moreLanguagesSoon;
   final String letsGo;
   final String all;
+  final String home;
+  final String quiz;
+  final String quizSubtitle;
+  final String chooseCategory;
+  final String mixedQuestions;
+  final String numberOfQuestions;
+  final String pointsPerCorrect;
+  final String pointsSpeedBonus;
+  final String pointsPerfectBonus;
+  final String startQuiz;
+  final String yourScore;
+  final String correct;
+  final String outOf;
+  final String pointsEarned;
+  final String playAgain;
+  final String backHome;
+  final String perfectScore;
+  final String speedBonus;
 
   const AppStrings({
     required this.appName,
@@ -67,6 +85,24 @@ class AppStrings {
     required this.moreLanguagesSoon,
     required this.letsGo,
     required this.all,
+    required this.home,
+    required this.quiz,
+    required this.quizSubtitle,
+    required this.chooseCategory,
+    required this.mixedQuestions,
+    required this.numberOfQuestions,
+    required this.pointsPerCorrect,
+    required this.pointsSpeedBonus,
+    required this.pointsPerfectBonus,
+    required this.startQuiz,
+    required this.yourScore,
+    required this.correct,
+    required this.outOf,
+    required this.pointsEarned,
+    required this.playAgain,
+    required this.backHome,
+    required this.perfectScore,
+    required this.speedBonus,
   });
 
   static const en = AppStrings(
@@ -104,6 +140,24 @@ class AppStrings {
     moreLanguagesSoon: 'More languages coming soon.',
     letsGo: "Let's go! 🚀",
     all: 'All',
+    home: 'Home',
+    quiz: 'Quiz',
+    quizSubtitle: 'Test your knowledge',
+    chooseCategory: 'Choose a category',
+    mixedQuestions: 'Questions from all categories',
+    numberOfQuestions: 'Number of questions',
+    pointsPerCorrect: 'Correct answer',
+    pointsSpeedBonus: 'Answer within 5 seconds',
+    pointsPerfectBonus: 'Perfect score bonus',
+    startQuiz: 'Start Quiz',
+    yourScore: 'Your Score',
+    correct: 'Correct',
+    outOf: 'out of',
+    pointsEarned: 'Points earned',
+    playAgain: 'Play Again',
+    backHome: 'Back to Quiz',
+    perfectScore: '🏆 Perfect score!',
+    speedBonus: '⚡ Speed bonus!',
   );
 
   static const sv = AppStrings(
@@ -141,6 +195,24 @@ class AppStrings {
     moreLanguagesSoon: 'Fler språk kommer snart.',
     letsGo: 'Kör igång! 🚀',
     all: 'Alla',
+    home: 'Hem',
+    quiz: 'Quiz',
+    quizSubtitle: 'Testa dina kunskaper',
+    chooseCategory: 'Välj en kategori',
+    mixedQuestions: 'Frågor från alla kategorier',
+    numberOfQuestions: 'Antal frågor',
+    pointsPerCorrect: 'Rätt svar',
+    pointsSpeedBonus: 'Svara inom 5 sekunder',
+    pointsPerfectBonus: 'Bonuspoäng för perfekt resultat',
+    startQuiz: 'Starta quiz',
+    yourScore: 'Ditt resultat',
+    correct: 'Rätt',
+    outOf: 'av',
+    pointsEarned: 'Poäng intjänade',
+    playAgain: 'Spela igen',
+    backHome: 'Tillbaka till quiz',
+    perfectScore: '🏆 Perfekt resultat!',
+    speedBonus: '⚡ Snabbhetsbonus!',
   );
 
   static AppStrings of(String language) {

@@ -1,6 +1,9 @@
 import 'package:commonsense_app/l10n/app_strings.dart';
+import 'package:commonsense_app/providers/facts_provider.dart';
+import 'package:commonsense_app/services/stats_service.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -50,6 +53,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _strings = AppStrings.of(_selectedLanguage == 'Swedish' ? 'sv' : 'en');
       _saved = true;
     });
+    if (mounted) {
+      final provider = context.read<FactsProvider>();
+      await provider.loadLanguage();
+      await provider.loadInitial();
+    }
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) setState(() => _saved = false);
     });
@@ -68,10 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF0F172A),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
         title: Text(
           _strings.settings,
           style: const TextStyle(
@@ -84,6 +89,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
+          // Stats section
+          _buildSectionLabel('Stats'),
+          _buildStatsCard(),
+          const SizedBox(height: 16),
           // Profile section
           _buildSectionLabel(_strings.profile),
           _buildCard(
@@ -308,6 +317,69 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildStatsCard() {
+    return FutureBuilder<Map<String, dynamic>>(
+      future: StatsService.loadStats(),
+      builder: (context, snapshot) {
+        final stats = snapshot.data;
+        final totalPoints = stats?['totalPoints'] ?? 0;
+        final totalQuizzes = stats?['totalQuizzes'] ?? 0;
+        final totalCorrect = stats?['totalCorrect'] ?? 0;
+        final totalAnswered = stats?['totalAnswered'] ?? 0;
+        final accuracy = StatsService.accuracy(totalCorrect, totalAnswered);
+
+        return _buildCard(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  _buildStatItem('⭐', '$totalPoints', 'Total Points'),
+                  _buildStatDivider(),
+                  _buildStatItem('🎯', '$totalQuizzes', 'Quizzes'),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  _buildStatItem('✅', '$totalCorrect', 'Correct'),
+                  _buildStatDivider(),
+                  _buildStatItem('📊', '${accuracy.toInt()}%', 'Accuracy'),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildStatItem(String emoji, String value, String label) {
+    return Expanded(
+      child: Column(
+        children: [
+          Text(emoji, style: const TextStyle(fontSize: 24)),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          Text(
+            label,
+            style: const TextStyle(color: Color(0xFF64748B), fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatDivider() {
+    return Container(width: 1, height: 60, color: const Color(0xFF334155));
   }
 
   Widget _buildDivider() {

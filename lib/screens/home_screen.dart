@@ -1,4 +1,3 @@
-import 'package:commonsense_app/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -222,27 +221,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-                      ),
-                      // Settings button
-                      IconButton(
-                        icon: const Icon(
-                          Icons.person_rounded,
-                          color: Color(0xFF6366F1),
-                        ),
-                        onPressed: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const SettingsScreen(),
-                            ),
-                          );
-                          _loadUserName();
-                          if (mounted) {
-                            final provider = context.read<FactsProvider>();
-                            await provider.loadLanguage();
-                            await provider.loadInitial();
-                          }
-                        },
                       ),
                     ],
                   ),
